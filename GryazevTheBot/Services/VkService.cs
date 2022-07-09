@@ -73,7 +73,7 @@ namespace GryazevTheBot.Services
                 SendMessage(responce, message.PeerId);
             }
 
-            return string.Empty;
+            return "ok";
         }
     }
 }

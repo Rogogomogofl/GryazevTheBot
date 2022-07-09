@@ -10,6 +10,9 @@ builder.Services
     .AddSingleton<IVkService, VkService>()
     .AddSingleton<IBotService, BotService>();
 
+builder.Configuration["Config:Confirmation"] = Environment.GetEnvironmentVariable("Confirmation");
+builder.Configuration["Config:AccessToken"] = Environment.GetEnvironmentVariable("AccessToken");
+
 var app = builder.Build();
 
 app.MapPost("/callback", ([FromBody] Update update, IVkService vkService) =>
