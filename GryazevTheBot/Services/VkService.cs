@@ -1,14 +1,16 @@
-﻿using VkNet.Abstractions;
+﻿using GryazevTheBot.Models;
+using VkNet.Abstractions;
 using VkNet.Enums.SafetyEnums;
 using VkNet.Model;
 using VkNet.Model.GroupUpdate;
 using VkNet.Model.RequestParams;
+using VkNet.Utils;
 
 namespace GryazevTheBot.Services
 {
     public interface IVkService
     {
-        public string HandleGroupUpdate(GroupUpdate groupUpdate);
+        public string HandleGroupUpdate(Update update);
     }
 
     public class VkService : IVkService
@@ -58,14 +60,14 @@ namespace GryazevTheBot.Services
             });
         }
 
-        public string HandleGroupUpdate(GroupUpdate groupUpdate)
+        public string HandleGroupUpdate(Update update)
         {
-            if (groupUpdate.Type == GroupUpdateType.Confirmation)
+            if (update.Type == "confirmation")
                 return _configuration["Config:Confirmation"];
 
-            if (groupUpdate.Type == GroupUpdateType.MessageNew)
+            if (update.Type == "message_new")
             {
-                var message = groupUpdate.MessageNew.Message;
+                var message = Message.FromJson(new VkResponse(update.Object));
                 var responce = _botService.HandleMessage(message.Text);
 
                 SendMessage(responce, message.PeerId);

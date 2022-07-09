@@ -1,10 +1,8 @@
+using GryazevTheBot.Models;
 using GryazevTheBot.Services;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 using VkNet;
 using VkNet.Abstractions;
-using VkNet.Model.GroupUpdate;
-using VkNet.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services
@@ -14,9 +12,9 @@ builder.Services
 
 var app = builder.Build();
 
-app.MapPost("/callback", ([FromBody]object update, IVkService vkService) =>
+app.MapPost("/callback", ([FromBody] Update update, IVkService vkService) =>
 {
-    return Results.Ok(vkService.HandleGroupUpdate(GroupUpdate.FromJson(new VkResponse(JToken.FromObject(update)))));
+    return Results.Ok(vkService.HandleGroupUpdate(update));
 });
 
 app.Run();
