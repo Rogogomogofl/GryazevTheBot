@@ -1,16 +1,12 @@
-﻿using GryazevTheBot.Models;
-using VkNet.Abstractions;
+﻿using VkNet.Abstractions;
 using VkNet.Enums.SafetyEnums;
-using VkNet.Model;
 using VkNet.Model.GroupUpdate;
-using VkNet.Model.RequestParams;
-using VkNet.Utils;
 
 namespace GryazevTheBot.Services
 {
     public interface IVkService
     {
-        public string HandleGroupUpdate(Update update);
+        public Task<string> HandleGroupUpdateAsync(GroupUpdate update);
     }
 
     public class VkService : IVkService
@@ -38,13 +34,13 @@ namespace GryazevTheBot.Services
 
         private void Auth()
         {
-            _vkApi.Authorize(new ApiAuthParams
+            _vkApi.Authorize(new ()
             {
                 AccessToken = _configuration["Config:AccessToken"]
             });
         }
 
-        private void SendMessage(string message, long? peerId)
+        private async Task SendMessageAsync(string message, long? peerId)
         {
             if (string.IsNullOrEmpty(message))
                 return;
@@ -52,7 +48,7 @@ namespace GryazevTheBot.Services
             if (message.Length > MaxMessageLength)
                 message = message.Substring(0, MaxMessageLength);
 
-            _vkApi.Messages.Send(new MessagesSendParams
+            await _vkApi.Messages.SendAsync(new ()
             {
                 Message = message,
                 PeerId = peerId,
@@ -60,17 +56,17 @@ namespace GryazevTheBot.Services
             });
         }
 
-        public string HandleGroupUpdate(Update update)
+        public async Task<string> HandleGroupUpdateAsync(GroupUpdate update)
         {
-            if (update.Type == "confirmation")
-                return _configuration["Config:Confirmation"];
+            if (update.Type == GroupUpdateType.Confirmation)
+                return await _vkApi.Groups.GetCallbackConfirmationCodeAsync((ulong)update.GroupId);
 
-            if (update.Type == "message_new")
+            if (update.Type == GroupUpdateType.MessageNew)
             {
-                var message = Message.FromJson(new VkResponse(update.Object));
+                var message = update.MessageNew.Message;
                 var responce = _botService.HandleMessage(message.Text);
 
-                SendMessage(responce, message.PeerId);
+                await SendMessageAsync(responce, message.PeerId);
             }
 
             return "ok";

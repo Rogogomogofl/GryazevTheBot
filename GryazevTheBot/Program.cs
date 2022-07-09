@@ -1,8 +1,9 @@
-using GryazevTheBot.Models;
 using GryazevTheBot.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using VkNet;
 using VkNet.Abstractions;
+using VkNet.Model.GroupUpdate;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services
@@ -15,10 +16,10 @@ builder.Configuration["Config:AccessToken"] = Environment.GetEnvironmentVariable
 
 var app = builder.Build();
 
-app.MapPost("/callback", ([FromBody] Update update, IVkService vkService) =>
+app.MapPost("/callback", async ([FromBody] object body, IVkService vkService) =>
 {
-    var response = vkService.HandleGroupUpdate(update);
-    return response;
+    var update = GroupUpdate.FromJson(new VkNet.Utils.VkResponse(JToken.Parse(body?.ToString() ?? "")));
+    return await vkService.HandleGroupUpdateAsync(update);
 });
 
 app.Run();
