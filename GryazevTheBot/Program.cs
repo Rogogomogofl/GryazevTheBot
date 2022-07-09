@@ -14,7 +14,8 @@ var app = builder.Build();
 
 app.MapPost("/callback", ([FromBody] Update update, IVkService vkService) =>
 {
-    return Results.Ok(vkService.HandleGroupUpdate(update));
+    var response = vkService.HandleGroupUpdate(update);
+    return response;
 });
 
 app.Run();
