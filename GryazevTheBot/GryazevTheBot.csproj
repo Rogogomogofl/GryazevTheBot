@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\data.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\data.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Markov" Version="2.0.0" />
     <PackageReference Include="VkNet" Version="1.69.0" />
   </ItemGroup>
 

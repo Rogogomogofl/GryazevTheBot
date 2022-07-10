@@ -11,6 +11,7 @@
     "GryazevTheBot": {
       "commandName": "Project",
       "environmentVariables": {
+        "ChainOrder": "1",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "AccessToken": "fdabbd7692dc08aaa4afbcbd2ad45cd6deb8ea13cbf43dfc8ee8ab6c3031333e5d1eddae0390c563a3c93",
         "Confirmation": "b88360b2"

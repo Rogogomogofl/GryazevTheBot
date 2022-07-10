@@ -13,6 +13,7 @@ builder.Services
 
 builder.Configuration["Config:Confirmation"] = Environment.GetEnvironmentVariable("Confirmation");
 builder.Configuration["Config:AccessToken"] = Environment.GetEnvironmentVariable("AccessToken");
+builder.Configuration["Config:ChainOrder"] = Environment.GetEnvironmentVariable("ChainOrder");
 
 var app = builder.Build();
 
