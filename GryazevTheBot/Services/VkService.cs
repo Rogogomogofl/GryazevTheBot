@@ -59,7 +59,7 @@ namespace GryazevTheBot.Services
         public async Task<string> HandleGroupUpdateAsync(GroupUpdate update)
         {
             if (update.Type == GroupUpdateType.Confirmation)
-                return await _vkApi.Groups.GetCallbackConfirmationCodeAsync((ulong)update.GroupId);
+                return _configuration["Config:Confirmation"];
 
             if (update.Type == GroupUpdateType.MessageNew)
             {
